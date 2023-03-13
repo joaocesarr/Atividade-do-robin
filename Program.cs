@@ -1,67 +1,125 @@
 ﻿using System;
 
-public class Aluno
+public class Calculadora
 {
-    public int RA { get; set; }
-    public string Nome { get; set; }
-    public double NotaProva { get; set; }
-    public double NotaTrabalho { get; set; }
-    public double NotaFinal { get; set; }
+    private double ValorA { get; set; }
+    private double ValorB { get; set; }
+    private double Resultado { get; set; }
+    private Calculo calculo = new Calculo();
 
-    public void CalcularMedia()
+    public void LerValores()
     {
-        NotaFinal = (NotaProva + NotaTrabalho) / 2.0;
+        Console.Write("Digite o valor de A: ");
+        ValorA = double.Parse(Console.ReadLine());
+
+        Console.Write("Digite o valor de B: ");
+        ValorB = double.Parse(Console.ReadLine());
     }
 
-    public bool CalcularNotaFinal(double notaMinimaAprovacao)
+    public void CalcularSoma()
     {
-        double media = NotaFinal;
-        double notaNecessaria = Math.Round((notaMinimaAprovacao * 2.0 - media), 2);
+        Resultado = calculo.Somar(ValorA, ValorB);
+    }
 
-        Console.WriteLine($"Nota necessária na prova final: {notaNecessaria}");
+    public void CalcularSubtracao()
+    {
+        Resultado = calculo.Subtrair(ValorA, ValorB);
+    }
 
-        if (notaNecessaria <= 10 && notaNecessaria >= 0)
+    public void CalcularMultiplicacao()
+    {
+        Resultado = calculo.Multiplicar(ValorA, ValorB);
+    }
+
+    public double RetornarMaior()
+    {
+        return calculo.RetornarMaior(ValorA, ValorB);
+    }
+
+    public void SomarGeral(double valor)
+    {
+        Resultado = calculo.SomarGeral(ValorA, ValorB, valor);
+    }
+
+    public void ImprimirResultado()
+    {
+        Console.WriteLine("Resultado: " + Resultado);
+    }
+
+    public void ExecutarCalculadora()
+    {
+        Console.WriteLine("Selecione a operação desejada:");
+        Console.WriteLine("1 - Soma");
+        Console.WriteLine("2 - Subtração");
+        Console.WriteLine("3 - Multiplicação");
+        Console.WriteLine("4 - Retornar o maior valor");
+        Console.WriteLine("5 - Somar com um valor adicional");
+        Console.Write("Opção: ");
+        int opcao = int.Parse(Console.ReadLine());
+
+        LerValores();
+
+        switch (opcao)
         {
-            double notaFinal = (media + notaNecessaria) / 2.0;
-            NotaFinal = notaFinal;
-            Console.WriteLine($"Nota final: {notaFinal}");
+            case 1:
+                CalcularSoma();
+                break;
+            case 2:
+                CalcularSubtracao();
+                break;
+            case 3:
+                CalcularMultiplicacao();
+                break;
+            case 4:
+                Resultado = RetornarMaior();
+                break;
+            case 5:
+                Console.Write("Digite o valor adicional: ");
+                double valorAdicional = double.Parse(Console.ReadLine());
+                SomarGeral(valorAdicional);
+                break;
+            default:
+                Console.WriteLine("Opção inválida");
+                break;
+        }
 
-            if (notaFinal >= notaMinimaAprovacao)
-            {
-                Console.WriteLine("Aprovado!");
-                return true;
-            }
-            else
-            {
-                Console.WriteLine("Reprovado!");
-                return false;
-            }
-        }
-        else
-        {
-            Console.WriteLine("Não é possível alcançar essa nota na prova final.");
-            Console.WriteLine("Reprovado!");
-            return false;
-        }
+        ImprimirResultado();
+    }
+}
+
+public class Calculo
+{
+    public double Somar(double a, double b)
+    {
+        return a + b;
     }
 
-    public void ImprimirNotaFinal()
+    public double Subtrair(double a, double b)
     {
-        Console.WriteLine($"Nota final do aluno {Nome} (RA: {RA}): {NotaFinal}");
+        return a - b;
     }
 
-    public void ReceberDados()
+    public double Multiplicar(double a, double b)
     {
-        Console.Write("Digite o RA do aluno: ");
-        RA = int.Parse(Console.ReadLine());
+        return a * b;
+    }
 
-        Console.Write("Digite o nome do aluno: ");
-        Nome = Console.ReadLine();
+    public double RetornarMaior(double a, double b)
+    {
+        return a > b ? a : b;
+    }
 
-        Console.Write("Digite a nota da prova do aluno: ");
-        NotaProva = double.Parse(Console.ReadLine());
+    public double SomarGeral(double a, double b, double valorAdicional)
+    {
+        return a + b + valorAdicional;
+    }
+}
 
-        Console.Write("Digite a nota do trabalho do aluno: ");
-        NotaTrabalho = double.Parse(Console.ReadLine());
+public class Program
+{
+    static void Main(string[] args)
+    {
+        Calculadora calculadora = new Calculadora();
+        calculadora.ExecutarCalculadora();
     }
 }
